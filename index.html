@@ -1,0 +1,148 @@
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 20px;
+    }
+    .calculadora {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #555;
+    }
+    input[type="number"], input[type="date"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    button[type="submit"] {
+      width: 100%;
+      padding: 14px;
+      background-color: #084ca4;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    button[type="submit"]:hover {
+      background-color: #084ca4;
+    }
+    .resultados {
+      margin-top: 20px;
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .resultados ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    .resultados li {
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #333;
+    }
+    .resultados li strong {
+      color: #084ca4;
+    }
+  </style>
+
+  <div class="calculadora">
+    <h2>Rescisão Trabalhista</h2>
+    <br>
+    <form id="rescisao-form">
+      <label for="salario">Salário:</label>
+      <input type="number" id="salario" required>
+      
+      <label for="tempo-contrato">Tempo de contrato (em meses):</label>
+      <input type="number" id="tempo-contrato" required>
+      
+      <label for="data-admissao">Data de admissão:</label>
+      <input type="date" id="data-admissao" required>
+      
+      <label for="data-demissao">Data de demissão:</label>
+      <input type="date" id="data-demissao" required>
+      
+      <button type="submit">Calcular</button>
+    </form>
+
+    <div id="resultados" class="resultados" style="display: none;">
+      <h3>Resultados:</h3>
+      <ul>
+        <li><strong>Aviso prévio:</strong> <span id="aviso-previo"></span></li>
+        <li><strong>Férias proporcionais:</strong> <span id="ferias-proporcionais"></span></li>
+        <li><strong>Décimo terceiro salário:</strong> <span id="decimo-terceiro-salario"></span></li>
+        <li><strong>Outras verbas rescisórias:</strong> <span id="outras-verbas-rescisorias"></span></li>
+        <li><strong>Total:</strong> <span id="total"></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('rescisao-form');
+    const salarioInput = document.getElementById('salario');
+    const tempoContratoInput = document.getElementById('tempo-contrato');
+    const dataAdmissaoInput = document.getElementById('data-admissao');
+    const dataDemissaoInput = document.getElementById('data-demissao');
+    const resultadosDiv = document.getElementById('resultados');
+    const avisoPrevioSpan = document.getElementById('aviso-previo');
+    const feriasProporcionaisSpan = document.getElementById('ferias-proporcionais');
+    const decimoTerceiroSalarioSpan = document.getElementById('decimo-terceiro-salario');
+    const outrasVerbasRescisoriasSpan = document.getElementById('outras-verbas-rescisorias');
+    const totalSpan = document.getElementById('total');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const salario = parseFloat(salarioInput.value);
+      const tempoContrato = parseInt(tempoContratoInput.value);
+      const dataAdmissao = new Date(dataAdmissaoInput.value);
+      const dataDemissao = new Date(dataDemissaoInput.value);
+
+      // Calcular Aviso Prévio
+      const avisoPrevio = salario * (tempoContrato >= 12 ? 1 : tempoContrato / 12);
+
+      // Calcular Férias Proporcionais
+      const feriasProporcionais = salario * (tempoContrato / 12) / 3;
+
+      // Calcular Décimo Terceiro Salário
+      const decimoTerceiroSalario = salario * (tempoContrato / 12);
+
+      // Outras verbas rescisórias (exemplo de um cálculo simples)
+      const outrasVerbasRescisorias = 0; // Aqui você pode adicionar mais cálculos específicos
+
+      // Total
+      const total = avisoPrevio + feriasProporcionais + decimoTerceiroSalario + outrasVerbasRescisorias;
+
+      // Exibir resultados
+      avisoPrevioSpan.textContent = `R$ ${avisoPrevio.toFixed(2)}`;
+      feriasProporcionaisSpan.textContent = `R$ ${feriasProporcionais.toFixed(2)}`;
+      decimoTerceiroSalarioSpan.textContent = `R$ ${decimoTerceiroSalario.toFixed(2)}`;
+      outrasVerbasRescisoriasSpan.textContent = `R$ ${outrasVerbasRescisorias.toFixed(2)}`;
+      totalSpan.textContent = `R$ ${total.toFixed(2)}`;
+
+      resultadosDiv.style.display = 'block';
+    });
+  </script>
